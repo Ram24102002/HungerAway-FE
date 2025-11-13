@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+body{
+    overflow-x: hidden;
+    font-family: "Poppins", sans-serif;
+}
+
+
+::selection {
+  background-color: #f19752;
+  color: #000000;
+}
+::-moz-selection{
+  background-color: #f19752;
+  color: #000000;
+}
+
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+/* Force light mode */
+:root {
+  color-scheme: light;
+  background-color: #fff;
+  color: #000;
+}
