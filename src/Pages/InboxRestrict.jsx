@@ -10,7 +10,7 @@ export default function InboxRestrict() {
   // ✅ Fetch data from backend
   const getContacts = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contacts`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

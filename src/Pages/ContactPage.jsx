@@ -29,7 +29,7 @@ export default function ContactPage() {
   }
 
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/contacts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
