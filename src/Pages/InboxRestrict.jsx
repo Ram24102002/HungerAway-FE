@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Mail, Star, Trash2, Menu, X } from "lucide-react";
+import logo from "../assets/HungerAwayNoBG.png";
+import logoText from "../assets/HungerAwayIcon.png";
 
 export default function InboxRestrict() {
   const [emails, setEmails] = useState([]); // initially empty
@@ -65,8 +67,10 @@ export default function InboxRestrict() {
         }`}
       >
         <div className="mb-8 flex justify-between items-center">
-          <div>
+          <div className="flex">
+            <img src={logoText} className="h-8 px-3 mt-[-4px]" alt="" />
             <h1 className="text-2xl font-light text-gray-900">Inbox</h1>
+            
             {/* <p className="text-sm text-gray-500 mt-1">{unreadCount} unread</p> */}
           </div>
           <button
@@ -110,6 +114,8 @@ export default function InboxRestrict() {
         <button onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
+        
+            <img src={logo} className="h-10" alt="" />
         <h1 className="text-lg font-semibold text-gray-800">Inbox</h1>
       </div>
 
