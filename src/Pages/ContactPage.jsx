@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CornerUpLeft } from 'lucide-react';
 import HungerAway from '../assets/HungerAwayNoBG.png';
 import { Link } from 'react-router-dom';
+import { notifyTostFun } from '../../Utils/notifyTostFun.js';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -42,7 +43,8 @@ export default function ContactPage() {
     if (response.ok) {
       // success
       setSubmitted(true);
-      alert("✅ Message sent successfully!");
+      notifyTostFun("✅ Message sent successfully!", "green");
+      // alert("✅ Message sent successfully!");
       setFormData({ name: "", email: "", phone: "", message: "" });
 
       setTimeout(() => setSubmitted(false), 3000);

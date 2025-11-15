@@ -55,7 +55,7 @@ function Hero() {
         </div>
 
         {/* Right Illustration */}
-        <div className="flex-1  flex justify-center items-center">
+        <div className="flex-1  flex justify-center items-center mt-7 md:mt-0">
           <img src={HungerAwayHero} className='h-[40dvh] md:h-[70dvh]' alt="" />
         </div>
       </div></div>

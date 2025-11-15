@@ -8,13 +8,13 @@ import IndianCityCards from './Pages/IndianCityCards';
 import Nav from './Components/Nav';
 import ContactPage from './Pages/ContactPage';
 import AboutUs from './Pages/AboutUs';
-import InboxRestrict from './Pages/InboxRestrict';
+import Inbox from './Pages/Inbox';
 
 
 
 function AppContent() {
   const location = useLocation();
-  const hideLayoutNav = ["/ContactPage","/InboxRestrict"]; // Remove Nav
+  const hideLayoutNav = ["/ContactPage","/inbox"]; // Remove Nav
 
   const shouldHideLayoutNav = hideLayoutNav.includes(location.pathname);
 
@@ -41,7 +41,7 @@ useEffect(() => {
         <Route path='/IndianCityCards' element={<IndianCityCards />} />
         <Route path='/ContactPage' element={<ContactPage />} />
         <Route path='/AboutUs' element={<AboutUs />} />
-        <Route path='/InboxRestrict' element={<InboxRestrict />} />
+        <Route path='/Inbox' element={<Inbox />} />
       </Routes>
 
       {/* {!shouldHideLayoutFooter && <Footer />} */}

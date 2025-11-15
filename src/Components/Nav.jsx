@@ -93,7 +93,7 @@ const FAQ = [
       {/* Page Content (Nav + Main UI) */}
       <div className="drawer-content">
         {/* Navbar */}
-        <nav className="flex bg-white md:flex-row items-center justify-between md:px-8 mt-6 md:mt-4 md:mx-20 px-4">
+        <nav className="flex bg-white md:flex-row items-center justify-between md:px-8 mt-2 md:mt-4 md:mx-20 px-4">
           <Link to="/" className="flex items-center gap-2">
             <img src={HungerAwayLogo} alt="No Food Waste Logo" className="w-30 h-16" />
             {/* <span className="text-2xl font-bold text-black">Hunger Away</span> */}

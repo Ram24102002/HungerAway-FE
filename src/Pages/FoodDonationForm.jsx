@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Package, Clock, MapPin, Utensils, Vibrate, NotebookPen } from 'lucide-react';
+import { notifyTostFun } from '../../Utils/notifyTostFun.js';
 
 export default function FoodDonationForm() {
   const [DonationFormData, setDonationFormData] = useState({
@@ -33,7 +34,7 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
 
       if (response.ok) {
         // success
-        successToast();
+        notifyTostFun("✅ Donation submitted successfully!", "green");
         // alert("✅ Donation submitted successfully!");
         setDonationFormData({ city: "", area: "", foodName: "", isPacked: false, edibleDays: "", phone: "", note: "" });
       } else {
@@ -45,24 +46,7 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
     }
   };
 
- const successToast = () => {
-  const toast = document.createElement("div");
 
-  // Tailwind classes for top-center positioning and z-index
-  toast.className = "fixed top-5 left-1/2 transform -translate-x-1/2 z-50";
-
-  // Inner HTML for the green alert
-  toast.innerHTML = `
-    <div class="alert alert-success shadow-lg">
-      <span>✅ Donation submitted !</span>
-    </div>
-  `;
-
-  document.body.appendChild(toast);
-
-  // Remove toast after 5 seconds
-  setTimeout(() => toast.remove(), 5000);
-};
 
 
   const handleChange = (name, value) => {
