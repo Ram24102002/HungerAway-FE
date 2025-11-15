@@ -3,6 +3,7 @@ import { Mail, Users, Menu, X, Plus } from "lucide-react";
 import logo from "../assets/HungerAwayNoBG.png";
 import logoText from "../assets/HungerAwayIcon.png";
 import { Link, useNavigate } from "react-router-dom";
+import { notifyTostFun } from "../../Utils/notifyTostFun.js";
 
 export default function AdminDashboard() {
   const [emails, setEmails] = useState([]);
@@ -71,6 +72,7 @@ export default function AdminDashboard() {
 
       const data = await response.json();
       console.log("Volunteer added successfully:", data);
+      notifyTostFun("Volunteer added successfully!", "green");
       getVolunteers(); // Refresh the volunteer list
     } catch (error) {
       console.error("Error adding volunteer:", error);

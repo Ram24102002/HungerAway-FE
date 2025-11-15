@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Package, Clock, MapPin, Utensils, CheckCircle, XCircle } from 'lucide-react';
+import CountdownTimer from '../Components/CountdownTimer';
 
 export default function FoodDonationList() {
   
@@ -18,6 +19,8 @@ export default function FoodDonationList() {
   useEffect(() => {
     fetchDonations();
   }, []);
+
+  
   
 
   return (
@@ -82,6 +85,15 @@ export default function FoodDonationList() {
                   </div>
                 </div>
 
+                <div className="flex items-center gap-3">
+                  <Package className="w-4 h-4 text-gray-600" />
+                  <span className={`text-sm font-medium ${
+                    donation.isPacked ? 'text-green-600' : 'text-amber-600'
+                  }`}>
+                    {donation.isPacked ? 'Packed' : 'Unpacked'}
+                  </span>
+                </div>
+
 
                 <div className="flex items-center gap-2">
                   <button
@@ -92,7 +104,6 @@ export default function FoodDonationList() {
                   </button>
                   <p className="text-sm text-gray-700 line-clamp-1">- {donation.note || "Not Notes Provided"}</p>
                 </div>
-
 
 
 
@@ -111,21 +122,13 @@ export default function FoodDonationList() {
               {/* Divider */}
               <div className="border-t border-gray-200 mb-6"></div>
 
-              {/* Additional Info */}
-              <div className="flex items-center justify-between mb-6">
+              {/* Expires At */}
+              <div className="flex items-center justify-center mb-6">
                 <div className="flex items-center gap-2">
-                  <Package className="w-4 h-4 text-gray-600" />
-                  <span className={`text-sm font-medium ${
-                    donation.isPacked ? 'text-green-600' : 'text-amber-600'
-                  }`}>
-                    {donation.isPacked ? 'Packed' : 'Unpacked'}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
+                  <p>Expires in: </p>
                   <Clock className="w-4 h-4 text-gray-600" />
                   <span className="text-sm font-medium text-gray-900">
-                    {donation.edibleDays} {donation.durationType || "Days"}
+                  <CountdownTimer expiresAt={donation.expiresAt} />
                   </span>
                 </div>
               </div>

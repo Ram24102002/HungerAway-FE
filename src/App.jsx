@@ -8,13 +8,13 @@ import IndianCityCards from './Pages/IndianCityCards';
 import Nav from './Components/Nav';
 import ContactPage from './Pages/ContactPage';
 import AboutUs from './Pages/AboutUs';
-import Inbox from './Pages/Inbox';
+import AdminPanel from './Pages/AdminPanel';
 
 
 
 function AppContent() {
   const location = useLocation();
-  const hideLayoutNav = ["/ContactPage","/inbox"]; // Remove Nav
+  const hideLayoutNav = ["/ContactPage","/AdminPanel"]; // Remove Nav
 
   const shouldHideLayoutNav = hideLayoutNav.includes(location.pathname);
 
@@ -41,7 +41,7 @@ useEffect(() => {
         <Route path='/IndianCityCards' element={<IndianCityCards />} />
         <Route path='/ContactPage' element={<ContactPage />} />
         <Route path='/AboutUs' element={<AboutUs />} />
-        <Route path='/Inbox' element={<Inbox />} />
+        <Route path='/AdminPanel' element={<AdminPanel />} />
       </Routes>
 
       {/* {!shouldHideLayoutFooter && <Footer />} */}
