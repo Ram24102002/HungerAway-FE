@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Clock, MapPin, Utensils, CheckCircle, XCircle } from 'lucide-react';
+import { Package, Clock, MapPin} from 'lucide-react';
 import CountdownTimer from '../Components/CountdownTimer';
+import HungerAwayDonations from '../assets/HungerAway_Donations.png'
 
 export default function FoodDonationList() {
   
@@ -24,23 +25,23 @@ export default function FoodDonationList() {
   
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-t from-gray-100 to-white py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col items-center justify-between mb-7">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-full">
-              <Utensils className="w-8 h-8 text-white" />
-            </div>
+        <div className="flex flex-col items-center justify-between mb-7 gap-4 px-10">
+          <div className="flex  items-center gap-4">
             <div>
-              <h1 className="text-2xl md:text-4xl font-bold text-gray-900">Available Food Donations</h1>
-              <p className="text-gray-600">Fresh food waiting to be collected</p>
+              <h1 className="text-2xl md:text-4xl font-bold text-gray-900 text-center">Available Food Donations</h1>
+              <p className="text-gray-600 text-center">Fresh food waiting to be collected</p>
             </div>
           </div>
           <div className="flex item-center justify-between  bg-white border-2 border-gray-200 px-8 py-2 mt-4 rounded-lg">
             <div className="text-3xl font-bold text-indigo-600">{donations.length}</div>
             <p className="text-sm p-2 text-gray-600">Active Donations</p>
           </div>
+          <div className="flex items-center justify-center w-40 h-40 rounded-full">
+              <img src={HungerAwayDonations} alt="" />
+            </div>
         </div>
 
         {/* Cards Grid */}
