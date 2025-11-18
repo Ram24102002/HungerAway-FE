@@ -18,7 +18,7 @@ export default function RequestButton({donation}) {
     setError('');
 
     try {
-      const response = await fetch('/api/requests', { // Make sure port matches your backend
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`, { // Make sure port matches your backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
