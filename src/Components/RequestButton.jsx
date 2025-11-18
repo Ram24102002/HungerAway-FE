@@ -18,7 +18,7 @@ export default function RequestButton({donation}) {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/requests', { // Make sure port matches your backend
+      const response = await fetch('/api/requests', { // Make sure port matches your backend
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
