@@ -14,7 +14,7 @@ import AdminPanel from './Pages/AdminPanel';
 
 function AppContent() {
   const location = useLocation();
-  const hideLayoutNav = ["/contactpage","/adminpanel"]; // Remove Nav
+  const hideLayoutNav = ["/ContactPage","/AdminPanel"]; // Remove Nav
 
   const shouldHideLayoutNav = hideLayoutNav.includes(location.pathname);
 

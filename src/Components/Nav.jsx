@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import HungerAwayLogo from "../assets/HungerAwayNoBG.png";
 import { Link } from "react-router-dom";
-import { MessageCircleQuestionMark, Menu, X } from "lucide-react";
+import { MessageCircleQuestionMark, Menu, X, HandPlatter } from "lucide-react";
 
 function Nav() {
 const FAQ = [
@@ -145,13 +145,23 @@ const FAQ = [
 
         {/* ---------- Fullscreen Mobile Menu ---------- */}
         {isMenuOpen && (
-          <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center text-center space-y-6">
+          <div className="fixed inset-0 bg-white z-50 flex flex-col py-30 px-10  space-y-6">
             <button
               className="absolute top-6 right-6 text-gray-700"
               onClick={() => setIsMenuOpen(false)}
             >
               <X size={32} />
             </button>
+
+
+            <h1 className="text-left text-4xl flex">Menu  <HandPlatter size={35} /></h1>
+            
+            
+            <hr className="w-1/4"/>
+            <hr className="w-2/4"/>
+            <hr className="w-3/4"/>
+
+            <hr className=""/>
 
             <Link
               to="/"
@@ -161,7 +171,9 @@ const FAQ = [
               Home
             </Link>
 
-            <Link
+            <hr />
+
+            {/* <Link
               to="/IndianCityCards"
               className="text-xl text-gray-800 font-medium flex items-center justify-center gap-2"
               onClick={() => setIsMenuOpen(false)}
@@ -170,7 +182,9 @@ const FAQ = [
               <span className="badge badge-dash badge-primary text-[10px] px-2 py-0.5">
                 Beta
               </span>
-            </Link>
+            </Link> */}
+
+            {/* <hr /> */}
 
             <Link
               to="/AboutUs"
@@ -179,6 +193,10 @@ const FAQ = [
             >
               About Us
             </Link>
+
+            
+            <hr className="w-2/4"/>
+
 
             {/* ✅ FAQ works perfectly on mobile now */}
             <label
@@ -195,6 +213,9 @@ const FAQ = [
               FAQ
             </label>
 
+            
+            <hr className="w-1/4"/>
+
 
             <Link
               to="/ContactPage"
@@ -205,6 +226,8 @@ const FAQ = [
                 Contact Us
               </button>
             </Link>
+
+            
           </div>
         )}
       </div>
