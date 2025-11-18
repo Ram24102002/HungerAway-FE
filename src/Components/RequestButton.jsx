@@ -8,47 +8,53 @@ export default function RequestButton({donation}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
- const handleSubmit = async () => {
+const handleSubmit = async () => {
     if (!name || !phone) {
-      setError('Please fill in all fields');
-      return;
+        setError('Please fill in all fields');
+        return;
     }
 
     setIsLoading(true);
     setError('');
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`, { // Make sure port matches your backend
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name,
-          phone,
-          donation: donation._id  // Send only the ID instead of the entire donation object
-        }),
-      });
+        // Create the request payload
+        const payload = {
+            name,
+            phone,
+            donation: donation._id  // Just send the ID
+        };
 
-      const data = await response.json();
+        console.log('Sending payload:', payload); // Add logging
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
-      }
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        });
 
-      setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-        setName('');
-        setPhone('');
-        setIsOpen(false);
-      }, 2000);
+        const data = await response.json();
+        console.log('Response:', data); // Add logging
+
+        if (!response.ok) {
+            throw new Error(data.message || data.error || 'Something went wrong');
+        }
+
+        setSubmitted(true);
+        setTimeout(() => {
+            setSubmitted(false);
+            setName('');
+            setPhone('');
+            setIsOpen(false);
+        }, 2000);
 
     } catch (err) {
-      console.error('Error:', err);
-      setError(err.message);
+        console.error('Error:', err);
+        setError(err.message);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
 };
   return (
