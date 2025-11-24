@@ -16,7 +16,10 @@ function AppContent() {
   const location = useLocation();
   const hideLayoutNav = ["/ContactPage","/AdminPanel"]; // Remove Nav
 
-  const shouldHideLayoutNav = hideLayoutNav.includes(location.pathname);
+ const shouldHideLayoutNav = hideLayoutNav
+  .map(route => route.toLowerCase())
+  .includes(location.pathname.toLowerCase());
+
 
 
   // This will wake your API whenever someone opens your site
