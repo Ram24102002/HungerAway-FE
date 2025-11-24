@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Mail, Users, Menu, X, Plus, GitPullRequestArrow } from "lucide-react";
+import { Mail, Users, Menu, X, Plus, GitPullRequestArrow, Trash2 } from "lucide-react";
 import logo from "../assets/HungerAwayNoBG.png";
 import logoText from "../assets/HungerAwayIcon.png";
 import { Link, useNavigate } from "react-router-dom";
 import { notifyTostFun } from "../../Utils/notifyTostFun.js";
+import volunteerImg from "../assets/HungerAway_Donations.png"
+import { DelViewRequests } from "../API/DelViewRequests.js"
+import { DelVolunteers } from "../API/DelVolunteers.js";
+import { DelEmails } from "../API/DelEmails.js";
 
 export default function AdminDashboard() {
   const [emails, setEmails] = useState([]);
@@ -96,7 +100,8 @@ const getRequests = async () => {
     const data = await response.json();
     console.log("Requests fetched successfully:", data);
 
-    setRequests(data.data); // <-- THIS WAS MISSING
+ setRequests(data.data);
+
   } catch (error) {
     console.error("Error fetching requests:", error);
   }
@@ -121,7 +126,18 @@ const getRequests = async () => {
   return (
     <div>
       <div className="flex flex-col md:flex-row h-screen bg-white">
-        {/* Sidebar */}
+        
+
+
+
+
+        
+
+{/* -------------------------------------------------------------------------------------------------------------------------------------------------- */}
+
+ {/* SideBar */}
+
+{/* -------------------------------------------------------------------------------------------------------------------------------------------------- */}
         <div
           className={`fixed md:static top-0 left-0 z-40 h-full w-3/4 sm:w-64 bg-white border-r border-gray-200 p-6 transition-transform duration-300 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
@@ -159,6 +175,24 @@ const getRequests = async () => {
             </button>
 
             <button
+              onClick={() => handleSectionChange("ViewRequests")}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition ${
+                activeSection === "ViewRequests"
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <GitPullRequestArrow size={20}/>
+              <span className="text-sm font-medium">View Requests</span>
+              {requests.length > 0 && (
+                <span className="ml-auto text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
+                  {requests.length}
+                </span>
+              )}
+            </button>
+            
+
+            <button
               onClick={() => handleSectionChange("volunteers")}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition ${
                 activeSection === "volunteers"
@@ -187,17 +221,7 @@ const getRequests = async () => {
               <span className="text-sm font-medium">Add Volunteer</span>
             </button>
 
-            <button
-              onClick={() => handleSectionChange("ViewRequests")}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition ${
-                activeSection === "ViewRequests"
-                  ? "bg-blue-50 text-blue-600"
-                  : "text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              <GitPullRequestArrow size={20}/>
-              <span className="text-sm font-medium">View Requests</span>
-            </button>
+            
 
             <button
   onClick={() => navigate("/")}
@@ -209,18 +233,41 @@ const getRequests = async () => {
           </nav>
         </div>
 
+
+
+
+
+
+
+
         {/* Mobile Top Bar */}
         <div className="flex md:hidden items-center justify-between p-4 border-b border-gray-200">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <div className="flex space-x-2">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <img src={logo} className="h-10 cursor-pointer" onClick={() => navigate("/")} alt="Hunger Away" />
           <h1 className="text-lg font-semibold text-gray-800">Admin Dashboard</h1>
+          </div>
+          <img src={logo} className="h-10 cursor-pointer" onClick={() => navigate("/")} alt="Hunger Away" />
+          
         </div>
 
         {/* Split View */}
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-          {/* List View */}
+
+
+
+
+
+
+
+
+
+{/* -------------------------------------------------------------------------------------------------------------------------------------------------- */}
+
+ {/* List bar */}
+
+{/* -------------------------------------------------------------------------------------------------------------------------------------------------- */}
           <div className="w-full md:w-96 border-b md:border-b-0 md:border-r border-gray-200 flex flex-col h-1/2 md:h-auto">
             <div className="flex-1 overflow-y-auto">
 
@@ -235,23 +282,32 @@ const getRequests = async () => {
                           setSelectedEmail(email);
                           setSelectedVolunteer(null);
                         }}
-                        className={`p-5 border-b border-gray-200 cursor-pointer transition-colors ${
+                        className={`p-5 border-b border-gray-200 flex items-center gap-4 cursor-pointer ${
                           selectedEmail?._id === email._id
                             ? "bg-blue-50"
                             : "hover:bg-gray-50"
                         }`}
-                      >
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="text-sm font-semibold text-gray-900">
-                            {email.name}
+                        >
+                          
+                          <div>
+                            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
+                              {email.name?.charAt(0)}
+                            </div>
+                          </div>
+
+                          <div>
+                            <h3 className="text-md font-semibold text-gray-900 ">
+                            {email.name || "Unknown"}
                           </h3>
-                        </div>
-                        <p className="text-xs text-gray-400">
-                          {new Date(email.createdAt).toLocaleString()}
-                        </p>
-                        <p className="text-xs text-gray-500 line-clamp-1 mt-2">
-                          {email.message}
-                        </p>
+
+                          <p className="text-xs text-gray-400">
+                            {new Date(email.createdAt).toLocaleString()}
+                          </p>
+
+                          <p className="text-xs text-gray-500 mt-1 flex space-x-2">
+                            Message:{email.message}
+                          </p>
+                          </div>
                       </div>
                     ))
                   ) : (
@@ -261,6 +317,63 @@ const getRequests = async () => {
                   )}
                 </>
               )}
+
+
+
+              {/* ViewRequests */}
+              {activeSection === "ViewRequests" && (
+                  <div className="w-full" id="ViewRequests">
+                    {Array.isArray(requests) && requests.length > 0 ? (
+                      requests.map((request) => (
+                        <div
+                          key={request._id}
+                          onClick={() => {
+                            setSelectedRequest(request);
+                            setSelectedEmail(null);
+                            setSelectedVolunteer(null);
+                          }}
+                          className={`p-5 border-b border-gray-200 flex items-center gap-4 cursor-pointer ${
+                          selectedRequest?._id === request._id
+                            ? "bg-blue-50"
+                            : "hover:bg-gray-50"
+                        }`}
+                        >
+                          
+                          <div>
+                            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
+                              {request.name?.charAt(0)}
+                            </div>
+                          </div>
+
+                          <div>
+                            <h3 className="text-md font-semibold text-gray-900 ">
+                            {request.name || "Unknown"}
+                          </h3>
+
+                          <p className="text-xs text-gray-400">
+                            {new Date(request.createdAt).toLocaleString()}
+                          </p>
+
+                          <p className="text-xs text-gray-500 mt-1 flex space-x-2">
+                            Requested Donation:{" "}
+                            <p className=" text-gray-800 bg-gray-200 rounded-md px-2">
+                            {typeof request.donation === "object"
+                              ? request.donation.foodName || request.donation._id
+                              : request.donation}</p>
+                          </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-6 text-gray-500 text-sm text-center">
+                        No requests found.
+                      </div>
+                    )}
+                  </div>
+                )}
+
+
+
 
               {/* Volunteer List */}
               {activeSection === "volunteers" && (
@@ -274,23 +387,36 @@ const getRequests = async () => {
                           setSelectedVolunteer(volunteer);
                           setSelectedEmail(null);
                         }}
-                        className={`p-5 border-b border-gray-200 cursor-pointer transition-colors ${
+                        className={`p-5 border-b border-gray-200 flex items-center gap-4 cursor-pointer ${
                         selectedVolunteer?._id === volunteer._id
                           ? "bg-blue-50"
                           : "hover:bg-gray-50"
                       }`}
                       >
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="text-sm font-semibold text-gray-900">
-                            {volunteer.name}
-                          </h3>
-                        </div>
-                        <p className="text-xs text-gray-400">
-                          {volunteer.email}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {volunteer.phone}
-                        </p>
+                          <div>
+                            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
+                              {volunteer.name?.charAt(0)}
+                            </div>
+                          </div>
+
+                          <div className="flex-1 min-w-0">  {/* <-- ensures it stretches */}
+                            <div className="flex justify-between items-center w-full gap-2">
+                              <h3 className="text-md font-semibold text-gray-900 truncate max-w-[65%]">
+                                {volunteer.name || "Unknown"}
+                              </h3>
+
+                              <span className="text-xs text-gray-500 whitespace-nowrap">
+                                {new Date(volunteer.createdAt).toLocaleString()}
+                              </span>
+                            </div>
+
+                            <p className="text-xs text-gray-400 truncate">{volunteer.email}</p>
+
+                            <p className="text-xs text-gray-500 mt-1">
+                              {volunteer.phone}
+                            </p>
+                          </div>
+
                       </div>
                     ))
                   ) : (
@@ -374,62 +500,35 @@ const getRequests = async () => {
               )
                 }
 
-                {activeSection === "ViewRequests" && (
-                  <div className="w-full p-6" id="ViewRequests">
-                    {Array.isArray(requests) && requests.length > 0 ? (
-                      requests.map((request) => (
-                        <div
-                          key={request._id}
-                          onClick={() => {
-                            setSelectedRequest(request);
-                            setSelectedEmail(null);
-                            setSelectedVolunteer(null);
-                          }}
-                          className="p-5 border-b border-gray-200 flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition-colors"
-                        >
-                          
-                          <div>
-                            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
-                              {request.name?.charAt(0)}
-                            </div>
-                          </div>
-
-                          <div>
-                            <h3 className="text-md font-semibold text-gray-900 ">
-                            {request.name || "Unknown"}
-                          </h3>
-
-                          <p className="text-xs text-gray-400">
-                            {new Date(request.createdAt).toLocaleString()}
-                          </p>
-
-                          <p className="text-xs text-gray-500 mt-1 flex space-x-2">
-                            Requested Donation:{" "}
-                            <p className=" text-gray-800 bg-gray-200 rounded-md px-2">
-                            {typeof request.donation === "object"
-                              ? request.donation.foodName || request.donation._id
-                              : request.donation}</p>
-                          </p>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="p-6 text-gray-500 text-sm text-center">
-                        No requests found.
-                      </div>
-                    )}
-                  </div>
-                )}
+                
 
             </div>
           </div>
 
-          {/* Detail View */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* -------------------------------------------------------------------------------------------------------------------------------------------------- */}
+
+ {/* Detail View */}
+
+{/* -------------------------------------------------------------------------------------------------------------------------------------------------- */}
           <div className="flex-1 overflow-y-auto h-1/2 md:h-auto">
             {selectedEmail && activeSection === "inbox" ? (
               <div className="p-6 sm:p-8 max-w-3xl mx-auto">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
+                <div className="flex items-center justify-between gap-3 mb-6">
+                  <div className="flex justify-start item-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
                     {selectedEmail.name.charAt(0)}
                   </div>
                   <div className="flex-1">
@@ -439,6 +538,20 @@ const getRequests = async () => {
                     <p className="text-xs text-gray-500">
                       {new Date(selectedEmail.createdAt).toLocaleString()}
                     </p>
+                  </div>
+                  </div>
+                  <div>
+                    {selectedEmail?._id && (
+                  <div
+                    className="cursor-pointer"
+                    onClick={async () => {
+                      const deleted = await DelEmails(selectedEmail._id, getContacts);
+                      getContacts();
+                    }}
+                  >
+                    <Trash2 className="hover:text-gray-600" />
+                  </div>
+                )}
                   </div>
                 </div>
 
@@ -454,8 +567,9 @@ const getRequests = async () => {
               </div>
             ) : selectedVolunteer && activeSection === "volunteers" ? (
               <div className="p-6 sm:p-8 max-w-3xl mx-auto">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-medium">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex justify-start item-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-medium">
                     {selectedVolunteer.name.charAt(0)}
                   </div>
                   <div className="flex-1">
@@ -463,6 +577,20 @@ const getRequests = async () => {
                       {selectedVolunteer.name}
                     </p>
                     <p className="text-xs text-gray-500">Volunteer</p>
+                  </div>
+                  </div>
+                  <div>
+                    {selectedVolunteer?._id && (
+                  <div
+                    className="cursor-pointer"
+                    onClick={async () => {
+                      const deleted = await DelVolunteers(selectedVolunteer._id, getVolunteers);
+                      getVolunteers();
+                    }}
+                  >
+                    <Trash2 className="hover:text-gray-600" />
+                  </div>
+                )}
                   </div>
                 </div>
 
@@ -472,7 +600,7 @@ const getRequests = async () => {
                   <br />
                   <p><span className="font-medium mb-2">Phone:</span> {selectedVolunteer.phone}</p>
                   <br />
-                  {selectedVolunteer.availability && (
+                  {/* {selectedVolunteer.availability && (
                     <>
                       <p><span className="font-medium mb-2">Availability:</span> {selectedVolunteer.availability}</p>
                       <br />
@@ -483,56 +611,73 @@ const getRequests = async () => {
                       <p className="font-medium mb-2">Skills:</p>
                       <p className="mt-2">{selectedVolunteer.skills}</p>
                     </>
-                  )}
+                  )} */}
                 </div>
               </div>
             ) : selectedRequest && activeSection === "ViewRequests" ? (
-    <div className="p-6 sm:p-8 max-w-3xl mx-auto">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
-          {selectedRequest.name?.charAt(0)}
-        </div>
-        <div className="flex-1">
-          <p className="text-sm font-medium text-gray-900">
-            {selectedRequest.name || "Unknown Requester"}
-          </p>
-          <p className="text-xs text-gray-500">
-            {new Date(selectedRequest.createdAt).toLocaleString()}
-          </p>
-        </div>
-      </div>
+              <div className="p-6 sm:p-8 max-w-3xl mx-auto">
+                <div className="flex justify-between item-center">
+                  <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
+                    {selectedRequest.name?.charAt(0)}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900">
+                      {selectedRequest.name || "Unknown Requester"}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {new Date(selectedRequest.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
 
-      <div className="text-gray-700 text-sm sm:text-base leading-relaxed">
-        <hr className="my-4" />
+                {selectedRequest?._id && (
+                  <div
+                    className="cursor-pointer"
+                    onClick={async () => {
+                      const deleted = await DelViewRequests(selectedRequest._id, getRequests);
+                      getRequests();
+                    }}
+                  >
+                    <Trash2 className="hover:text-gray-600" />
+                  </div>
+                )}
 
-        <p><span className="font-medium">Phone:</span> {selectedRequest.phone}</p>
-        <br />
 
-        <div className="flex space-x-2 ">
-          <p className="font-medium mb-2">Donation Requested:</p>
-        <p className=" text-gray-600">
-          {typeof selectedRequest.donation === "object"
-            ? `${selectedRequest.donation.foodName || "Food Item"} (ID: ${selectedRequest.donation._id})`
-            : selectedRequest.donation}
-        </p>
-        </div>
 
-        <br />
-        {selectedRequest.donation?.city && (
-          <div className="flex space-x-2">
-            <p className="font-medium mb-2">Donation Location: </p>
-            <p>{selectedRequest.donation.city}, {selectedRequest.donation.area}</p>
-          </div>
-        )}
-        <br />
-        {selectedRequest.requestnote && (
-          <>
-            <p className="font-medium mb-2">Request Note:</p>
-            <p className="mt-1 text-gray-600">{selectedRequest.requestnote}</p>
-          </>
-        )}
-      </div>
-    </div>
+                </div>
+
+                <div className="text-gray-700 text-sm sm:text-base leading-relaxed">
+                  <hr className="my-4" />
+
+                  <p><span className="font-medium">Phone:</span> {selectedRequest.phone}</p>
+                  <br />
+
+                  <div className="flex space-x-2 ">
+                    <p className="font-medium mb-2">Donation Requested:</p>
+                  <p className=" text-gray-600">
+                    {typeof selectedRequest.donation === "object"
+                      ? `${selectedRequest.donation.foodName || "Food Item"} (ID: ${selectedRequest.donation._id})`
+                      : selectedRequest.donation}
+                  </p>
+                  </div>
+
+                  <br />
+                  {selectedRequest.donation?.city && (
+                    <div className="flex space-x-2">
+                      <p className="font-medium mb-2">Donation Location: </p>
+                      <p>{selectedRequest.donation.city}, {selectedRequest.donation.area}</p>
+                    </div>
+                  )}
+                  <br />
+                  {selectedRequest.requestnote && (
+                    <>
+                      <p className="font-medium mb-2">Request Note:</p>
+                      <p className="mt-1 text-gray-600">{selectedRequest.requestnote}</p>
+                    </>
+                  )}
+                </div>
+              </div>
 
   ) : (
               <div className="flex items-center justify-center h-full text-center p-6">
@@ -554,13 +699,20 @@ const getRequests = async () => {
                     </>
                   )}
                   { activeSection === "ViewRequests" && (
-        <>
-          <GitPullRequestArrow size={36} className="text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-400 text-sm sm:text-base">
-            Select a request to view details
-          </p>
-        </>
-      )}
+                    <>
+                      <GitPullRequestArrow size={36} className="text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-400 text-sm sm:text-base">
+                        Select a request to view details
+                      </p>
+                    </>
+                  )}
+                  { activeSection === "AddVolunteers" && (
+                    <>
+                      <div>
+                        <img src={volunteerImg} className="md:p-100" alt="" />
+                      </div>
+                    </>
+                  )}
 
                 </div>
               </div>

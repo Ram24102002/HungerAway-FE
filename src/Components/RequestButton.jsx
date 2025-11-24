@@ -44,12 +44,14 @@ const handleSubmit = async () => {
       }
 
       setSubmitted(true);
+
       setTimeout(() => {
           setSubmitted(false);
           setName('');
           setPhone('');
           setNote('');
           setIsOpen(false);
+          setIsLoading(false);
       }, 2000);
 
   } catch (err) {
@@ -145,11 +147,13 @@ const handleSubmit = async () => {
 
               <button
                 onClick={handleSubmit}
-                disabled={isLoading}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
+                disabled={isLoading || submitted}
+                className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-md hover:shadow-lg disabled:opacity-50 
+                ${isLoading || submitted ? "cursor-not-allowed" : "cursor-pointer"}`}
               >
-                {isLoading ? 'Submitting...' : submitted ? '✓ Request Sent!' : 'Send Request'}
+                {submitted ? "✓ Request Sent!" : isLoading ? "Submitting..." : "Send Request"}
               </button>
+
 
               {error && (
                 <p className="text-red-500 text-sm mt-2">{error}</p>

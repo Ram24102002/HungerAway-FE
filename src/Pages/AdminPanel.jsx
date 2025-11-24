@@ -137,8 +137,8 @@ export default function Inbox() {
   return (
     <>
       {!authenticated ? (
-        <PasswordScreen onSuccess={() => setAuthenticated(true)} />
-        // <AdminDashboard onSuccess={() => setAuthenticated(true)} />
+        // <PasswordScreen onSuccess={() => setAuthenticated(true)} />
+        <AdminDashboard onSuccess={() => setAuthenticated(true)} />
       ) : (
         <AdminDashboard />
       )}
