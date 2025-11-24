@@ -537,14 +537,15 @@ const getRequests = async () => {
   ) : (
               <div className="flex items-center justify-center h-full text-center p-6">
                 <div>
-                  {activeSection === "inbox" ? (
+                  {activeSection === "inbox" && (
                     <>
                       <Mail size={36} className="text-gray-300 mx-auto mb-3" />
                       <p className="text-gray-400 text-sm sm:text-base">
                         Select a message to read
                       </p>
                     </>
-                  ) : (
+                  )}
+                  { activeSection === "volunteers" && (
                     <>
                       <Users size={36} className="text-gray-300 mx-auto mb-3" />
                       <p className="text-gray-400 text-sm sm:text-base">
@@ -552,6 +553,15 @@ const getRequests = async () => {
                       </p>
                     </>
                   )}
+                  { activeSection === "ViewRequests" && (
+        <>
+          <GitPullRequestArrow size={36} className="text-gray-300 mx-auto mb-3" />
+          <p className="text-gray-400 text-sm sm:text-base">
+            Select a request to view details
+          </p>
+        </>
+      )}
+
                 </div>
               </div>
             )}

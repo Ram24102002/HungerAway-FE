@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AdminDashboard from "./AdminDashboard";
 
@@ -7,6 +7,34 @@ function PasswordScreen({ onSuccess }) {
   const [pin, setPin] = useState(["", "", "", ""]);
   const [error, setError] = useState("");
   const inputsRef = useRef([]);
+  const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+
+
+  useEffect(() => {
+  setTimeout(() => {
+    inputsRef.current[0]?.focus();
+    if (isMobile) {
+      inputsRef.current[0]?.click(); // Helps trigger mobile keyboard
+    }
+  }, 300);
+}, []);
+
+
+
+useEffect(() => {
+  if (pin.join("").length === 4) {
+    if (pin.join("") === correctPin.join("")) {
+      onSuccess(); // Auto login
+    } else {
+      setError("Incorrect PIN");
+      setTimeout(() => {
+        setPin(["", "", "", ""]);
+        inputsRef.current[0]?.focus();
+      }, 500);
+    }
+  }
+}, [pin]);
+
 
   const correctPin = ["1", "2", "3", "4"]; // change to your PIN
 
