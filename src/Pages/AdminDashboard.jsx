@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Mail, Users, Menu, X, Plus } from "lucide-react";
+import { Mail, Users, Menu, X, Plus, GitPullRequestArrow } from "lucide-react";
 import logo from "../assets/HungerAwayNoBG.png";
 import logoText from "../assets/HungerAwayIcon.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,11 +10,14 @@ export default function AdminDashboard() {
   const [volunteers, setVolunteers] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+  const [requests, setRequests] = useState([]);
   const [activeSection, setActiveSection] = useState("inbox");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [selectedRequest, setSelectedRequest] = useState(null);
+
 
 
   const navigate = useNavigate();
@@ -79,10 +82,32 @@ export default function AdminDashboard() {
     }
   };
 
+const getRequests = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch requests");
+
+    const data = await response.json();
+    console.log("Requests fetched successfully:", data);
+
+    setRequests(data.data); // <-- THIS WAS MISSING
+  } catch (error) {
+    console.error("Error fetching requests:", error);
+  }
+};
+
+
 
   useEffect(() => {
     getContacts();
     getVolunteers();
+    getRequests();
   }, []);
 
   const handleSectionChange = (section) => {
@@ -160,6 +185,18 @@ export default function AdminDashboard() {
             >
               <Users size={20} />
               <span className="text-sm font-medium">Add Volunteer</span>
+            </button>
+
+            <button
+              onClick={() => handleSectionChange("ViewRequests")}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition ${
+                activeSection === "ViewRequests"
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <GitPullRequestArrow size={20}/>
+              <span className="text-sm font-medium">View Requests</span>
             </button>
 
             <button
@@ -272,70 +309,118 @@ export default function AdminDashboard() {
                   <div className="w-full p-6" id="addVolunteer">
 
 
-  <form className="bg-white"
-  onSubmit={(e)=>{
-        e.preventDefault();
+                  <form className="bg-white"
+                  onSubmit={(e)=>{
+                        e.preventDefault();
 
-        const volunteerData = {
-          name,
-          phone,
-          email
-        }
-        postVolunteer(volunteerData);
+                        const volunteerData = {
+                          name,
+                          phone,
+                          email
+                        }
+                        postVolunteer(volunteerData);
 
-        setName("");
-        setPhone("");
-        setEmail("");
-      }}
-  >
-    <h2 className="text-lg py-3 font-semibold  text-gray-800 flex justify-start item-center "><p className="px-3" >Add Volunteer</p> <Users /></h2>
+                        setName("");
+                        setPhone("");
+                        setEmail("");
+                      }}
+                  >
+                    <h2 className="text-lg py-3 font-semibold  text-gray-800 flex justify-start item-center "><p className="px-3" >Add Volunteer</p> <Users /></h2>
 
-    {/* Name */}
-    <div className="mb-3">
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none"
-        placeholder="Volunteer Name"
-      />
-    </div>
+                    {/* Name */}
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none"
+                        placeholder="Volunteer Name"
+                      />
+                    </div>
 
-    {/* Phone */}
-    <div className="mb-3">
-      <input
-        type="text"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none"
-        placeholder="Phone Number"
-      />
-    </div>
+                    {/* Phone */}
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none"
+                        placeholder="Phone Number"
+                      />
+                    </div>
 
-    {/* Email */}
-    <div className="mb-4">
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none"
-        placeholder="Email Address"
-      />
-    </div>
+                    {/* Email */}
+                    <div className="mb-4">
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full mt-1 px-3 py-2 border rounded-md focus:outline-none"
+                        placeholder="Email Address"
+                      />
+                    </div>
 
-    <button
-      type="submit"
-      
-      className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition flex justify-center items-center gap-2"
-    >
-      Add Volunteer <Plus />
-    </button>
-  </form>
+                    <button
+                      type="submit"
+                      
+                      className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition flex justify-center items-center gap-2"
+                    >
+                      Add Volunteer <Plus />
+                    </button>
+                  </form>
 
-</div>
+                </div>
 
               )
                 }
+
+                {activeSection === "ViewRequests" && (
+                  <div className="w-full p-6" id="ViewRequests">
+                    {Array.isArray(requests) && requests.length > 0 ? (
+                      requests.map((request) => (
+                        <div
+                          key={request._id}
+                          onClick={() => {
+                            setSelectedRequest(request);
+                            setSelectedEmail(null);
+                            setSelectedVolunteer(null);
+                          }}
+                          className="p-5 border-b border-gray-200 flex items-center gap-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                        >
+                          
+                          <div>
+                            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
+                              {request.name?.charAt(0)}
+                            </div>
+                          </div>
+
+                          <div>
+                            <h3 className="text-md font-semibold text-gray-900 ">
+                            {request.name || "Unknown"}
+                          </h3>
+
+                          <p className="text-xs text-gray-400">
+                            {new Date(request.createdAt).toLocaleString()}
+                          </p>
+
+                          <p className="text-xs text-gray-500 mt-1 flex space-x-2">
+                            Requested Donation:{" "}
+                            <p className=" text-gray-800 bg-gray-200 rounded-md px-2">
+                            {typeof request.donation === "object"
+                              ? request.donation.foodName || request.donation._id
+                              : request.donation}</p>
+                          </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-6 text-gray-500 text-sm text-center">
+                        No requests found.
+                      </div>
+                    )}
+                  </div>
+                )}
+
             </div>
           </div>
 
@@ -401,7 +486,55 @@ export default function AdminDashboard() {
                   )}
                 </div>
               </div>
-            ) : (
+            ) : selectedRequest && activeSection === "ViewRequests" ? (
+    <div className="p-6 sm:p-8 max-w-3xl mx-auto">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
+          {selectedRequest.name?.charAt(0)}
+        </div>
+        <div className="flex-1">
+          <p className="text-sm font-medium text-gray-900">
+            {selectedRequest.name || "Unknown Requester"}
+          </p>
+          <p className="text-xs text-gray-500">
+            {new Date(selectedRequest.createdAt).toLocaleString()}
+          </p>
+        </div>
+      </div>
+
+      <div className="text-gray-700 text-sm sm:text-base leading-relaxed">
+        <hr className="my-4" />
+
+        <p><span className="font-medium">Phone:</span> {selectedRequest.phone}</p>
+        <br />
+
+        <div className="flex space-x-2 ">
+          <p className="font-medium mb-2">Donation Requested:</p>
+        <p className=" text-gray-600">
+          {typeof selectedRequest.donation === "object"
+            ? `${selectedRequest.donation.foodName || "Food Item"} (ID: ${selectedRequest.donation._id})`
+            : selectedRequest.donation}
+        </p>
+        </div>
+
+        <br />
+        {selectedRequest.donation?.city && (
+          <div className="flex space-x-2">
+            <p className="font-medium mb-2">Donation Location: </p>
+            <p>{selectedRequest.donation.city}, {selectedRequest.donation.area}</p>
+          </div>
+        )}
+        <br />
+        {selectedRequest.requestnote && (
+          <>
+            <p className="font-medium mb-2">Request Note:</p>
+            <p className="mt-1 text-gray-600">{selectedRequest.requestnote}</p>
+          </>
+        )}
+      </div>
+    </div>
+
+  ) : (
               <div className="flex items-center justify-center h-full text-center p-6">
                 <div>
                   {activeSection === "inbox" ? (

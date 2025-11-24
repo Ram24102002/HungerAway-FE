@@ -4,59 +4,62 @@ export default function RequestButton({donation}) {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [requestnote, setNote] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
 const handleSubmit = async () => {
-    if (!name || !phone) {
-        setError('Please fill in all fields');
-        return;
-    }
+  if (!name || !phone) {
+      setError('Please fill in all fields');
+      return;
+  }
 
-    setIsLoading(true);
-    setError('');
+  setIsLoading(true);
+  setError('');
 
-    try {
-        // Create the request payload
-        const payload = {
-            name,
-            phone,
-            donation: donation._id  // Just send the ID
-        };
+  try {
+      const payload = {
+          name,
+          phone,
+          requestnote, // send matching key
+          donation: donation._id
+      };
 
-        console.log('Sending payload:', payload); // Add logging
+      console.log('Sending payload:', payload);
 
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload)
-        });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload)
+      });
 
-        const data = await response.json();
-        console.log('Response:', data); // Add logging
+      const data = await response.json();
+      console.log('Response:', data);
 
-        if (!response.ok) {
-            throw new Error(data.message || data.error || 'Something went wrong');
-        }
+      if (!response.ok) {
+          throw new Error(data.message || data.error || 'Something went wrong');
+      }
 
-        setSubmitted(true);
-        setTimeout(() => {
-            setSubmitted(false);
-            setName('');
-            setPhone('');
-            setIsOpen(false);
-        }, 2000);
+      setSubmitted(true);
+      setTimeout(() => {
+          setSubmitted(false);
+          setName('');
+          setPhone('');
+          setNote('');
+          setIsOpen(false);
+      }, 2000);
 
-    } catch (err) {
-        console.error('Error:', err);
-        setError(err.message);
-    } finally {
-        setIsLoading(false);
-    }
+  } catch (err) {
+      console.error('Error:', err);
+      setError(err.message);
+  } finally {
+      setIsLoading(false);
+  }
 };
+
   return (
     <div >
       {/* Button to open modal */}
@@ -108,6 +111,20 @@ const handleSubmit = async () => {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Enter your phone number"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  Request Note
+                </label>
+                <textarea
+                  id="requestnote"
+                  type="text"
+                  value={requestnote}
+                  onChange={(e) => setNote(e.target.value)}
                   placeholder="Enter your phone number"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                 />
