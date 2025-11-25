@@ -569,7 +569,7 @@ const getRequests = async () => {
               <div className="p-6 sm:p-8 max-w-3xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex justify-start item-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-medium">
+                    <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
                     {selectedVolunteer.name.charAt(0)}
                   </div>
                   <div className="flex-1">
@@ -680,6 +680,8 @@ const getRequests = async () => {
               </div>
 
   ) : (
+
+    // if no selection is made
               <div className="flex items-center justify-center h-full text-center p-6">
                 <div>
                   {activeSection === "inbox" && (
