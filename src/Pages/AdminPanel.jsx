@@ -124,6 +124,7 @@ useEffect(() => {
             {error}
           </p>
         )}
+        <p className="w-full flex items-center justify-center" >Enter : 1234</p>
       <p className="w-full flex items-center justify-center mt-10"><Link to='/'><u>Home</u></Link></p>
       </div>
     </div>
@@ -137,8 +138,8 @@ export default function Inbox() {
   return (
     <>
       {!authenticated ? (
-        // <PasswordScreen onSuccess={() => setAuthenticated(true)} />
-        <AdminDashboard onSuccess={() => setAuthenticated(true)} />
+        <PasswordScreen onSuccess={() => setAuthenticated(true)} />
+        // <AdminDashboard onSuccess={() => setAuthenticated(true)} />
       ) : (
         <AdminDashboard />
       )}

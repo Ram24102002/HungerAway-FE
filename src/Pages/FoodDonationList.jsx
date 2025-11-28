@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Clock, MapPin} from 'lucide-react';
+import { Package, Clock, MapPin, CheckCircle, XCircle} from 'lucide-react';
 import CountdownTimer from '../Components/CountdownTimer';
 import HungerAwayDonations from '../assets/HungerAway_Donations.png'
 import RequestButton from '../Components/RequestButton';
@@ -67,6 +67,16 @@ export default function FoodDonationList() {
                     <XCircle className="w-5 h-5 text-amber-600" />
                   </div>
                 )} */}
+                {donation.picked ? (
+                    
+                    <div className="bg-green-100 p-1 rounded-full flex justify-center item-center">
+                      Picked <CheckCircle className="w-5 h-5 text-green-600" />
+                    </div>
+                ) : (
+                  <div className="rounded-full">
+                    {/* <XCircle className="w-5 h-5 text-amber-600" /> */}
+                  </div>
+                )}
               </div>
 
               {/* Location Info */}

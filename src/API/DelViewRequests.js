@@ -1,4 +1,4 @@
-import { notifyTostFun } from '../../Utils/notifyTostFun.js'
+import { notifyTostFun } from '../Utils/notifyTostFun.js'
 
 export async function DelViewRequests(requestId, onDelete) {
   if (!confirm("Are you sure you want to delete this request?")) return false;

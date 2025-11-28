@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Mail, Users, Menu, X, Plus, GitPullRequestArrow, Trash2 } from "lucide-react";
+import { Mail, Users, Menu, X, Plus, GitPullRequestArrow, Trash2, CheckCircle2 } from "lucide-react";
 import logo from "../assets/HungerAwayNoBG.png";
 import logoText from "../assets/HungerAwayIcon.png";
 import { Link, useNavigate } from "react-router-dom";
-import { notifyTostFun } from "../../Utils/notifyTostFun.js";
+import { notifyTostFun } from "../Utils/notifyTostFun.js";
 import volunteerImg from "../assets/HungerAway_Donations.png"
 import { DelViewRequests } from "../API/DelViewRequests.js"
 import { DelVolunteers } from "../API/DelVolunteers.js";
 import { DelEmails } from "../API/DelEmails.js";
+import { getVolunteers } from "../API/getVolunteersAPI.js";
+import { markRequestPicked } from "../API/markRequestPicked.js";
 
 export default function AdminDashboard() {
   const [emails, setEmails] = useState([]);
@@ -21,7 +23,6 @@ export default function AdminDashboard() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [selectedRequest, setSelectedRequest] = useState(null);
-
 
 
   const navigate = useNavigate();
@@ -46,26 +47,7 @@ export default function AdminDashboard() {
     }
   };
 
-  // Fetch volunteers (you'll need to create this endpoint)
-  const getVolunteers = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/volunteers`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) throw new Error("Failed to fetch volunteers");
-
-      const data = await response.json();
-      console.log("Volunteers fetched successfully:", data);
-      setVolunteers(data);
-    } catch (error) {
-      console.error("Error fetching volunteers:", error);
-    }
-  };
-
+ 
   const postVolunteer = async (volunteerData) => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/volunteers`, {
@@ -186,7 +168,7 @@ const getRequests = async () => {
               <span className="text-sm font-medium">View Requests</span>
               {requests.length > 0 && (
                 <span className="ml-auto text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
-                  {requests.length}
+                  {requests.filter(r => !r.picked).length}
                 </span>
               )}
             </button>
@@ -614,13 +596,14 @@ const getRequests = async () => {
                   )} */}
                 </div>
               </div>
-            ) : selectedRequest && activeSection === "ViewRequests" ? (
-              <div className="p-6 sm:p-8 max-w-3xl mx-auto">
-                <div className="flex justify-between item-center">
-                  <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
-                    {selectedRequest.name?.charAt(0)}
-                  </div>
+            )  : selectedRequest && activeSection === "ViewRequests" ? (
+                  <div className="p-6 sm:p-8 max-w-3xl mx-auto">
+                    <div className="flex justify-between item-center">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white font-medium">
+                          {selectedRequest.name?.charAt(0)}
+                        </div>
+
                   <div className="flex-1">
                     <p className="text-sm font-medium text-gray-900">
                       {selectedRequest.name || "Unknown Requester"}
@@ -631,17 +614,48 @@ const getRequests = async () => {
                   </div>
                 </div>
 
-                {selectedRequest?._id && (
-                  <div
-                    className="cursor-pointer"
+                
+              
+
+                <div className="flex flex-col justify-center item-center gap-4 w-[150px]">
+                  
+                  {selectedRequest?._id && (
+                  <button
+                    className="cursor-pointer flex justify-center item-center"
                     onClick={async () => {
                       const deleted = await DelViewRequests(selectedRequest._id, getRequests);
                       getRequests();
                     }}
                   >
+                    
                     <Trash2 className="hover:text-gray-600" />
-                  </div>
+                  </button>
                 )}
+                {selectedRequest?._id && (
+                  <button
+                    onClick={async () => {
+                      if (!selectedRequest?._id) return;   // <-- PREVENT CRASH
+
+                      await markRequestPicked(
+                        selectedRequest._id,
+                        selectedRequest.picked
+                      );
+
+                      setSelectedRequest(prev => ({ ...prev, picked: !prev.picked }));
+                      setTimeout(() => getRequests(), 500);
+                    }}
+
+                    className={`flex justify-center item-center cursor-pointer 
+                      ${selectedRequest.picked ? "text-green-600 font-semibold" : "text-yellow-600"}`}
+                    id="CheckedOut"
+                    title="Checked-Out"
+                  >
+                    <CheckCircle2 className="hover:text-gray-600" />
+                    {selectedRequest.picked ? "Picked" : "Mark as picked"}
+                  </button>
+                )}
+
+                </div>
 
 
 
@@ -654,7 +668,7 @@ const getRequests = async () => {
                   <br />
 
                   <div className="flex space-x-2 ">
-                    <p className="font-medium mb-2">Donation Requested:</p>
+                    <p className="font-medium mb-2">Requested:</p>
                   <p className=" text-gray-600">
                     {typeof selectedRequest.donation === "object"
                       ? `${selectedRequest.donation.foodName || "Food Item"} (ID: ${selectedRequest.donation._id})`

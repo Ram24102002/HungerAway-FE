@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Package, Clock, MapPin, Utensils, Vibrate, NotebookPen } from 'lucide-react';
-import { notifyTostFun } from '../../Utils/notifyTostFun.js';
+import { notifyTostFun } from '../Utils/notifyTostFun.js';
 
 export default function FoodDonationForm() {
   const [DonationFormData, setDonationFormData] = useState({

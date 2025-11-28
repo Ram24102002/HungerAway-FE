@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CornerUpLeft } from 'lucide-react';
 import HungerAway from '../assets/HungerAwayNoBG.png';
 import { Link } from 'react-router-dom';
-import { notifyTostFun } from '../../Utils/notifyTostFun.js';
+import { notifyTostFun } from '../Utils/notifyTostFun.js';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({

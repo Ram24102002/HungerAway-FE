@@ -1,4 +1,4 @@
-import { notifyTostFun } from '../../Utils/notifyTostFun.js'
+import { notifyTostFun } from '../Utils/notifyTostFun.js'
 
 export async function DelEmails(requestId, onDelete) {
   if (!confirm("Are you sure you want to delete this Email?")) return false;

@@ -67,7 +67,8 @@ const handleSubmit = async () => {
       {/* Button to open modal */}
       <button
         onClick={() => setIsOpen(true)}
-        className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-opacity"
+        disabled={donation.picked}
+        className={`w-full text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-opacity ${donation.picked? "bg-gray-600":"bg-indigo-600 "}`}
       >
         Request Pickup
       </button>

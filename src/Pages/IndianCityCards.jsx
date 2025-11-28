@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MapPin , MapPinned } from 'lucide-react';
 import ChennaiImg from '../assets/Cities/Chennai.png';
 import MumbaiImg from '../assets/Cities/Mumbai.png';
@@ -9,13 +10,13 @@ import PuneImg from '../assets/Cities/Pune.png';
 
 const IndianCityCards = () => {
   const cities = [
-    { name: 'Chennai',  images: ChennaiImg  },
-    { name: 'Mumbai', images: MumbaiImg },
-    // { name: 'Delhi', images: DelhiImg  },
-    { name: 'Bangalore', images: BangaloreImg },
-    { name: 'Hyderabad', images: HyderabadImg },
-    { name: 'Kolkata', images: KolkataImg },
-    { name: 'Pune', images: PuneImg },
+    { name: 'Chennai',  images: ChennaiImg , link: '/FoodDonationList' },
+    { name: 'Mumbai', images: MumbaiImg , link: '/FoodDonationList' },
+    // { name: 'Delhi', images: DelhiImg  , link: '/FoodDonationList' },
+    { name: 'Bangalore', images: BangaloreImg, link: '/FoodDonationList'  },
+    { name: 'Hyderabad', images: HyderabadImg , link: '/FoodDonationList' },
+    { name: 'Kolkata', images: KolkataImg , link: '/FoodDonationList' },
+    { name: 'Pune', images: PuneImg , link: '/FoodDonationList' },
     // { name: 'Ahmedabad', images: AhmedabadImg },
     // { name: 'Jaipur', images: JaipurImg },
     // { name: 'Lucknow', images: LucknowImg }
@@ -28,7 +29,8 @@ const IndianCityCards = () => {
       </h1> */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 p-8 gap-15 max-w-7xl mx-auto">
         {cities.map((city, index) => (
-          <div
+          <Link to={city.link}>
+            <div
             key={index}
             className="rounded-xl  overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer"
           >
@@ -36,6 +38,7 @@ const IndianCityCards = () => {
               <img src={city.images} className='h-[100%] w-[100%]' alt="" />
             </div>
           </div>
+          </Link>
         ))}
       </div>
       <div className='block md:hidden flex flex-col justify-center items-center mt-4'>
