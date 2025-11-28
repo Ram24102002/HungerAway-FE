@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import HungerAwayLogo from "../assets/HungerAwayNoBG.png";
 import { Link } from "react-router-dom";
 import { MessageCircleQuestionMark, Menu, X, HandPlatter } from "lucide-react";
+import logo from "../assets/HungerAwayNoBG.png";
 
 function Nav() {
 const FAQ = [
@@ -154,14 +155,10 @@ const FAQ = [
             </button>
 
 
-            <h1 className="text-left text-4xl flex">Menu  <HandPlatter size={35} /></h1>
-            
-            
-            <hr className="w-1/4"/>
-            <hr className="w-2/4"/>
-            <hr className="w-3/4"/>
 
-            <hr className=""/>
+<img src={logo} alt="" />
+            <hr />
+            
 
             <Link
               to="/"
@@ -171,7 +168,7 @@ const FAQ = [
               Home
             </Link>
 
-            <hr />
+            {/* <hr /> */}
 
             {/* <Link
               to="/IndianCityCards"
@@ -194,8 +191,6 @@ const FAQ = [
               About Us
             </Link>
 
-            
-            <hr className="w-2/4"/>
 
 
             {/* ✅ FAQ works perfectly on mobile now */}
@@ -214,9 +209,8 @@ const FAQ = [
             </label>
 
             
-            <hr className="w-1/4"/>
 
-
+<hr />
             <Link
               to="/ContactPage"
               onClick={() => setIsMenuOpen(false)}
