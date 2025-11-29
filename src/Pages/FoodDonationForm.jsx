@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Package, Clock, MapPin, Utensils, Vibrate, NotebookPen } from 'lucide-react';
 import { notifyTostFun } from '../Utils/notifyTostFun.js';
 
 export default function FoodDonationForm() {
+
   const [DonationFormData, setDonationFormData] = useState({
     city: '',
     area: '',
@@ -13,6 +14,15 @@ export default function FoodDonationForm() {
     note: ''
   });
 
+  const [selected, setSelected] = useState("Hours");
+
+  const handleChange = (name, value) => {
+    setDonationFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -21,22 +31,29 @@ export default function FoodDonationForm() {
       return;
     }
 
-    try{
+    try {
       const dataToSend = { ...DonationFormData, durationType: selected };
-const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(dataToSend),
-});
 
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
-        // success
         notifyTostFun("✅ Donation submitted successfully!", "green");
-        // alert("✅ Donation submitted successfully!");
-        setDonationFormData({ city: "", area: "", foodName: "", isPacked: false, edibleDays: "", phone: "", note: "" });
+
+        setDonationFormData({
+          city: "",
+          area: "",
+          foodName: "",
+          isPacked: false,
+          edibleDays: "",
+          phone: "",
+          note: ""
+        });
       } else {
         alert(`❌ Error: ${data.error || "Something went wrong"}`);
       }
@@ -46,23 +63,10 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
     }
   };
 
-
-
-
-  const handleChange = (name, value) => {
-    setDonationFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-
-  
-  const [selected, setSelected] = useState("Hours");
-
   return (
     <div className="min-h-screen bg-gradient-to-t from-gray-100 to-white py-12 px-4">
       <div className="max-w-2xl mx-auto">
+
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-full mb-4">
@@ -72,25 +76,28 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
           <p className="text-gray-600">Help us distribute food to those in need</p>
         </div>
 
-        {/* Form Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="space-y-6">
-            {/* City Input */}
+
+            {/* City Dropdown */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                <MapPin className="w-4 h-4 text-indigo-600" />
-                City Name
-              </label>
-              <input
-                type="text"
+              <label className="block text-sm font-medium">City</label>
+              <select
                 value={DonationFormData.city}
-                onChange={(e) => handleChange('city', e.target.value)}
-                placeholder="Enter your city"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-600 transition"
-              />
+                onChange={(e) => handleChange("city", e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-orange-400 transition"
+              >
+                <option value="">Select City</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Pune">Pune</option>
+              </select>
             </div>
 
-            {/* Area Input */}
+            {/* Area */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                 <MapPin className="w-4 h-4 text-orange-400" />
@@ -105,7 +112,7 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
               />
             </div>
 
-            {/* Food Name Input */}
+            {/* Food Name */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                 <Utensils className="w-4 h-4 text-pink-500" />
@@ -120,11 +127,10 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
               />
             </div>
 
-
-            {/*  Phone Number Input */}
+            {/* Phone */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                <Vibrate  className="w-4 h-4 text-pink-500" />
+                <Vibrate className="w-4 h-4 text-pink-500" />
                 Contact Number
               </label>
               <input
@@ -136,14 +142,13 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
               />
             </div>
 
-            {/*  Note Textarea */}
+            {/* Note */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                 <NotebookPen className="w-4 h-4 text-pink-500" />
                 Note
               </label>
               <textarea
-                type="text"
                 value={DonationFormData.note}
                 onChange={(e) => handleChange('note', e.target.value)}
                 placeholder="Leave a note (optional)"
@@ -153,7 +158,7 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
 
             {/* Packed Toggle */}
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-xl">
-              <div 
+              <div
                 className="flex items-center justify-between cursor-pointer"
                 onClick={() => handleChange('isPacked', !DonationFormData.isPacked)}
               >
@@ -171,16 +176,14 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
               </div>
               <div className="mt-3 text-center">
                 <span className={`inline-block px-4 py-1 rounded-full text-sm font-medium ${
-                  DonationFormData.isPacked 
-                    ? 'bg-green-100 text-green-700' 
-                    : 'bg-amber-100 text-amber-700'
+                  DonationFormData.isPacked ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
                 }`}>
                   {DonationFormData.isPacked ? 'Packed ✓' : 'Not Packed'}
                 </span>
               </div>
             </div>
 
-            {/* Edible Days Input */}
+            {/* Edible Days */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                 <Clock className="w-4 h-4 text-emerald-500" />
@@ -191,24 +194,22 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
                   type="number"
                   value={DonationFormData.edibleDays}
                   onChange={(e) => handleChange('edibleDays', e.target.value)}
-                  placeholder="Enter number of days"
+                  placeholder="Enter number of hours/days"
                   min="1"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition pr-16"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition pr-20"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">
-                  <select
-        value={selected}
-        onChange={(e) => setSelected(e.target.value)}
-        className="block w-25 rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-700 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-      >
-        <option value="Hours">Hours</option>
-        <option value="Days">Days</option>
-      </select>
-                </span>
+                <select
+                  value={selected}
+                  onChange={(e) => setSelected(e.target.value)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 border bg-white px-2 py-1 rounded text-sm"
+                >
+                  <option value="Hours">Hours</option>
+                  <option value="Days">Days</option>
+                </select>
               </div>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <div className="pt-4">
               <button
                 onClick={handleSubmit}
@@ -217,9 +218,10 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
                 Submit Donation
               </button>
             </div>
+
           </div>
 
-          {/* Info Cards */}
+          {/* Info Boxes */}
           <div className="grid grid-cols-2 gap-4 mt-8">
             <div className="bg-orange-50 p-4 rounded-lg text-center">
               <div className="text-2xl font-bold text-orange-600">24/7</div>
@@ -232,10 +234,10 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations
           </div>
         </div>
 
-        {/* Footer Note */}
         <div className="text-center mt-6 text-sm text-gray-500">
           <p>Thank you for helping reduce food waste! 🌍</p>
         </div>
+
       </div>
     </div>
   );

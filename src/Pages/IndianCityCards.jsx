@@ -10,13 +10,13 @@ import PuneImg from '../assets/Cities/Pune.png';
 
 const IndianCityCards = () => {
   const cities = [
-    { name: 'Chennai',  images: ChennaiImg , link: '/FoodDonationList' },
-    { name: 'Mumbai', images: MumbaiImg , link: '/FoodDonationList' },
-    // { name: 'Delhi', images: DelhiImg  , link: '/FoodDonationList' },
-    { name: 'Bangalore', images: BangaloreImg, link: '/FoodDonationList'  },
-    { name: 'Hyderabad', images: HyderabadImg , link: '/FoodDonationList' },
-    { name: 'Kolkata', images: KolkataImg , link: '/FoodDonationList' },
-    { name: 'Pune', images: PuneImg , link: '/FoodDonationList' },
+    { name: 'Chennai',  images: ChennaiImg , link: '/FoodDonationList?city=Chennai' },
+    { name: 'Mumbai', images: MumbaiImg , link: '/FoodDonationList?city=Mumbai' },
+    // { name: 'Delhi', images: DelhiImg  , link: '/FoodDonationList?city=' },
+    { name: 'Bangalore', images: BangaloreImg, link: '/FoodDonationList?city=Banglore'  },
+    { name: 'Hyderabad', images: HyderabadImg , link: '/FoodDonationList?city=Hyderabad' },
+    { name: 'Kolkata', images: KolkataImg , link: '/FoodDonationList?city=Kolkata' },
+    { name: 'Pune', images: PuneImg , link: '/FoodDonationList?city=Pune' },
     // { name: 'Ahmedabad', images: AhmedabadImg },
     // { name: 'Jaipur', images: JaipurImg },
     // { name: 'Lucknow', images: LucknowImg }

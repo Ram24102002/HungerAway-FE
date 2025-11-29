@@ -86,7 +86,43 @@ const FAQ = [
   }, []);
 
   return (
-    // DaisyUI Drawer wrapper
+
+    <><style>{`
+        @keyframes slideInFromRight {
+          from {
+            transform: translateX(100%);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes slideInMenuItem {
+          from {
+            transform: translateX(50px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+
+        .mobile-menu-slide {
+          animation: slideInFromRight 0.3s ease-out;
+        }
+
+        .mobile-menu-slide li {
+          animation: slideInMenuItem 0.4s ease-out forwards;
+          opacity: 0;
+        }
+
+        .mobile-menu-slide li:nth-child(1) { animation-delay: 0.1s; }
+        .mobile-menu-slide li:nth-child(2) { animation-delay: 0.15s; }
+        .mobile-menu-slide li:nth-child(3) { animation-delay: 0.2s; }
+        .mobile-menu-slide li:nth-child(4) { animation-delay: 0.25s; }
+        .mobile-menu-slide li:nth-child(5) { animation-delay: 0.3s; }
+    `}</style>
     <div className="drawer">
       {/* Drawer toggle input (required by DaisyUI) */}
       <input id="my-drawer-1" type="checkbox" className="drawer-toggle" />
@@ -119,9 +155,9 @@ const FAQ = [
               className="text-md flex items-center gap-1 text-gray-700 hover:text-black"
             >
               <span>Cities</span>
-              <span className="badge badge-dash badge-primary text-[10px] mx-1 px-2 py-0.5">
+              {/* <span className="badge badge-dash badge-primary text-[10px] mx-1 px-2 py-0.5">
                 Beta
-              </span>
+              </span> */}
             </Link>
 
             <Link to="/AboutUs" className="text-md text-gray-700 hover:text-black">
@@ -146,9 +182,9 @@ const FAQ = [
 
         {/* ---------- Fullscreen Mobile Menu ---------- */}
         {isMenuOpen && (
-          <div className="fixed inset-0 bg-white z-50 flex flex-col py-30 px-10  space-y-6">
+          <div className="fixed inset-0 bg-white z-50 flex flex-col py-30 px-10  space-y-6 mobile-menu-slide">
             <button
-              className="absolute top-6 right-6 text-gray-700"
+              className="absolute top-6 right-6 text-gray-700 mobile-menu-slide"
               onClick={() => setIsMenuOpen(false)}
             >
               <X size={32} />
@@ -156,13 +192,13 @@ const FAQ = [
 
 
 
-<img src={logo} alt="" />
+<img src={logo} alt="" className="mobile-menu-slide" />
             <hr />
             
 
             <Link
               to="/"
-              className="text-xl text-gray-800 font-medium"
+              className="text-xl text-gray-800 font-medium mobile-menu-slide"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
@@ -170,22 +206,22 @@ const FAQ = [
 
             {/* <hr /> */}
 
-            {/* <Link
+            <Link
               to="/IndianCityCards"
-              className="text-xl text-gray-800 font-medium flex items-center justify-center gap-2"
+              className="text-xl text-gray-800 font-medium gap-2 mobile-menu-slide"
               onClick={() => setIsMenuOpen(false)}
             >
               <span>Cities</span>
-              <span className="badge badge-dash badge-primary text-[10px] px-2 py-0.5">
+              {/* <span className="badge badge-dash badge-primary text-[10px] px-2 py-0.5">
                 Beta
-              </span>
-            </Link> */}
+              </span> */}
+            </Link>
 
             {/* <hr /> */}
 
             <Link
               to="/AboutUs"
-              className="text-xl text-gray-800 font-medium"
+              className="text-xl text-gray-800 font-medium mobile-menu-slide"
               onClick={() => setIsMenuOpen(false)}
             >
               About Us
@@ -196,7 +232,7 @@ const FAQ = [
             {/* ✅ FAQ works perfectly on mobile now */}
             <label
               htmlFor="my-drawer-1"
-              className="text-xl text-gray-800 font-medium cursor-pointer"
+              className="text-xl text-gray-800 font-medium cursor-pointer mobile-menu-slide"
               onClick={() => {
                 setIsMenuOpen(false);
                 setTimeout(() => {
@@ -214,7 +250,7 @@ const FAQ = [
             <Link
               to="/ContactPage"
               onClick={() => setIsMenuOpen(false)}
-              className="mt-4"
+              className="mt-4 mobile-menu-slide"
             >
               <button className="px-8 py-3 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition">
                 Contact Us
@@ -266,6 +302,7 @@ const FAQ = [
 
 
     </div>
+    </>
   );
 }
 

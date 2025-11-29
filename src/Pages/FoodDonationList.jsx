@@ -3,14 +3,24 @@ import { Package, Clock, MapPin, CheckCircle, XCircle} from 'lucide-react';
 import CountdownTimer from '../Components/CountdownTimer';
 import HungerAwayDonations from '../assets/HungerAway_Donations.png'
 import RequestButton from '../Components/RequestButton';
+import { useLocation } from "react-router-dom";
 
 export default function FoodDonationList() {
-  
-  
   const [donations, setDonations] = useState([]);
+
+  // 1️⃣ Read city from URL (may be null)
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const selectedCity = params.get("city");
+
+  // 2️⃣ Fetch donations (all OR filtered)
   const fetchDonations = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/food-donations`);
+      const url = selectedCity
+        ? `${import.meta.env.VITE_API_URL}/api/food-donations?city=${selectedCity}`
+        : `${import.meta.env.VITE_API_URL}/api/food-donations`;   // <-- ALL
+
+      const response = await fetch(url);
       const data = await response.json();
       setDonations(data);
     } catch (error) {
@@ -18,11 +28,10 @@ export default function FoodDonationList() {
     }
   };
 
+  // 3️⃣ Re-run when selectedCity changes
   useEffect(() => {
     fetchDonations();
-  }, []);
-
-  
+  }, [selectedCity]);
   
 
   return (
