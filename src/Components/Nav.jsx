@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import HungerAwayLogo from "../assets/HungerAwayNoBG.png";
 import { Link } from "react-router-dom";
-import { MessageCircleQuestionMark, Menu, X, HandPlatter } from "lucide-react";
+import { MessageCircleQuestionMark, Menu, X, HandPlatter, Building2, House, Salad, TableOfContents, Cable } from "lucide-react";
 import logo from "../assets/HungerAwayNoBG.png";
+
 
 function Nav() {
 const FAQ = [
@@ -118,10 +119,10 @@ const FAQ = [
         }
 
         .mobile-menu-slide li:nth-child(1) { animation-delay: 0.1s; }
-        .mobile-menu-slide li:nth-child(2) { animation-delay: 0.15s; }
-        .mobile-menu-slide li:nth-child(3) { animation-delay: 0.2s; }
-        .mobile-menu-slide li:nth-child(4) { animation-delay: 0.25s; }
-        .mobile-menu-slide li:nth-child(5) { animation-delay: 0.3s; }
+        .mobile-menu-slide li:nth-child(2) { animation-delay: 0.4s; }
+        .mobile-menu-slide li:nth-child(3) { animation-delay: 0.6s; }
+        .mobile-menu-slide li:nth-child(4) { animation-delay: 0.8s; }
+        .mobile-menu-slide li:nth-child(5) { animation-delay: 1s; }
     `}</style>
     <div className="drawer">
       {/* Drawer toggle input (required by DaisyUI) */}
@@ -180,6 +181,9 @@ const FAQ = [
           </div>
         </nav>
 
+
+
+
         {/* ---------- Fullscreen Mobile Menu ---------- */}
         {isMenuOpen && (
           <div className="fixed inset-0 bg-white z-50 flex flex-col py-30 px-10  space-y-6 mobile-menu-slide">
@@ -192,16 +196,18 @@ const FAQ = [
 
 
 
-<img src={logo} alt="" className="mobile-menu-slide" />
+<Link to="/" className="mobile-menu-slide" onClick={() => setIsMenuOpen(false)}><img src={logo} alt="" className="mobile-menu-slide" /></Link>
             <hr />
             
 
-            <Link
+            {/* options */}
+            <div className="flex flex-col mobile-menu-slide space-y-6">
+              <Link
               to="/"
-              className="text-xl text-gray-800 font-medium mobile-menu-slide"
+              className="text-xl text-gray-800 font-medium mobile-menu-slide flex "
               onClick={() => setIsMenuOpen(false)}
             >
-              Home
+              <House  className="mr-4"/>Home
             </Link>
 
             {/* <hr /> */}
@@ -211,7 +217,7 @@ const FAQ = [
               className="text-xl text-gray-800 font-medium gap-2 mobile-menu-slide"
               onClick={() => setIsMenuOpen(false)}
             >
-              <span>Cities</span>
+              <span className="flex"><Building2 className="mr-4" />Cities</span>
               {/* <span className="badge badge-dash badge-primary text-[10px] px-2 py-0.5">
                 Beta
               </span> */}
@@ -221,10 +227,10 @@ const FAQ = [
 
             <Link
               to="/AboutUs"
-              className="text-xl text-gray-800 font-medium mobile-menu-slide"
+              className="text-xl text-gray-800 font-medium mobile-menu-slide flex"
               onClick={() => setIsMenuOpen(false)}
             >
-              About Us
+              <Salad className="mr-4" /> About Us
             </Link>
 
 
@@ -232,7 +238,7 @@ const FAQ = [
             {/* ✅ FAQ works perfectly on mobile now */}
             <label
               htmlFor="my-drawer-1"
-              className="text-xl text-gray-800 font-medium cursor-pointer mobile-menu-slide"
+              className="text-xl text-gray-800 font-medium cursor-pointer mobile-menu-slide flex "
               onClick={() => {
                 setIsMenuOpen(false);
                 setTimeout(() => {
@@ -241,7 +247,7 @@ const FAQ = [
                 }, 300); // wait 300ms for the overlay to close
               }}
             >
-              FAQ
+              <TableOfContents className="mr-4" /> FAQ
             </label>
 
             
@@ -252,10 +258,11 @@ const FAQ = [
               onClick={() => setIsMenuOpen(false)}
               className="mt-4 mobile-menu-slide"
             >
-              <button className="px-8 py-3 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition">
+              <button className="px-8 py-3 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition flex">
                 Contact Us
               </button>
             </Link>
+            </div>
 
             
           </div>
@@ -263,11 +270,10 @@ const FAQ = [
       </div>
 
 
-   {/* ---------- DaisyUI Drawer Side ---------- */}
+   {/* ---------- Drawer Side ---------- */}
 <div className="drawer-side z-[60] ">
   <label htmlFor="my-drawer-1" className="drawer-overlay dark:bg-gray-100"></label>
 
-  {/* 👇 Make the drawer appear as half-screen on small, full on medium+ */}
   <div className="bg-base-200 min-h-full w-full md:w-1/2 p-4 dark:bg-white fixed left-0 top-0 h-full overflow-y-auto">
     <div className="flex justify-start items-center relative">
       <h2 className="text-2xl font-bold mt-20 md:mt-7 my-7 mx-4 md:flex">
