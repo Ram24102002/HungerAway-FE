@@ -10,6 +10,7 @@ import { DelVolunteers } from "../API/DelVolunteers.js";
 import { DelEmails } from "../API/DelEmails.js";
 import { getVolunteers } from "../API/getVolunteersAPI.js";
 import { markRequestPicked } from "../API/markRequestPicked.js";
+import { markDonationPicked } from '../API/markDonationPicked.js'
 
 export default function AdminDashboard() {
   const [emails, setEmails] = useState([]);
@@ -356,13 +357,13 @@ useEffect(() => {
 
                           <div className="text-xs text-gray-500 mt-1 flex space-x-2">
                               <span>Requested Donation:</span>
-                              <span className="text-gray-800 bg-gray-200 rounded-md px-2">
+                              <span className={request.donation ? `text-gray-800 bg-gray-200 rounded-md px-2` : "text-white bg-red-600 rounded-md px-2"}>
 
                                 {request.donation
                                   ? typeof request.donation === "object"
                                     ? request.donation.foodName || request.donation._id || "Unknown"
                                     : request.donation
-                                  : "No donation info"}
+                                  : "Donation Expired"}
 
                               </span>
                             </div>
@@ -660,21 +661,50 @@ useEffect(() => {
                     onClick={async () => {
                       if (!selectedRequest?._id) return;   // <-- PREVENT CRASH
 
-                      await markRequestPicked(
+
+                       const newPicked = !selectedRequest.picked;
+
+                       
+                      if(selectedRequest.donation){
+                        await markRequestPicked(
                         selectedRequest._id,
                         selectedRequest.picked
                       );
+                      }else{
+                        console.log("no donation")
+                      }
 
-                      setSelectedRequest(prev => ({ ...prev, picked: !prev.picked }));
+
+
+                      if (selectedRequest?.donation && selectedRequest?.donation?._id) {
+                          await markDonationPicked(
+                            selectedRequest.donation?._id,
+                            selectedRequest.donation.picked
+                          );
+                        } else {
+                          console.log("⚠️ No donation found → skipping donation update");
+                        }
+
+
+                      console.log("Ping donation",selectedRequest.donation?.picked)
+  // FIX: update UI state
+  setSelectedRequest(prev => ({
+    ...prev,
+    picked: newPicked,
+    donation: prev.donation
+      ? { ...prev.donation, picked: newPicked }
+      : null
+  }));
                       setTimeout(() => getRequests(), 500);
                     }}
 
-                    className={`flex justify-center item-center cursor-pointer 
+                    className={`flex justify-center item-center cursor-pointer  border-2
+                      ${selectedRequest.donation ? "border-2" : "hidden"}
                       ${selectedRequest.picked ? "text-green-600 font-semibold" : "text-yellow-600"}`}
                     id="CheckedOut"
                     title="Checked-Out"
                   >
-                    <CheckCircle2 className="hover:text-gray-600" />
+                    {/* <CheckCircle2 className="hover:text-gray-600" /> */}
                     {selectedRequest.picked ? "Picked" : "Mark as picked"}
                   </button>
                 )}
@@ -697,7 +727,7 @@ useEffect(() => {
                     <p className="text-gray-600">
                       {selectedRequest.donation
                         ? (typeof selectedRequest.donation === "object"
-                            ? `${selectedRequest.donation.foodName || "Unknown Food"} (ID: ${selectedRequest.donation._id || "N/A"})`
+                            ? `${selectedRequest.donation.foodName || "Unknown Food"} (ID: ${selectedRequest.donation?._id || "N/A"})`
                             : selectedRequest.donation)
                         : "Expired"}
                     </p>
