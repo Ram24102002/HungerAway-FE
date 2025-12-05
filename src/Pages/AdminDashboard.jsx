@@ -62,7 +62,7 @@ export default function AdminDashboard() {
       const data = await response.json();
       console.log("Volunteer added successfully:", data);
       notifyTostFun("Volunteer added successfully!", "green");
-      getVolunteers(); // Refresh the volunteer list
+      loadVolunteers(); // Refresh the volunteer list
     } catch (error) {
       console.error("Error adding volunteer:", error);
     }
@@ -90,12 +90,29 @@ const getRequests = async () => {
 };
 
 
+const loadVolunteers = async () => {
+  const res = await getVolunteers();
+console.log("Volunteers final:", volunteers);
 
-  useEffect(() => {
-    getContacts();
-    getVolunteers();
-    getRequests();
-  }, []);
+  // API IS RETURNING AN ARRAY DIRECTLY
+  if (Array.isArray(res)) {
+    setVolunteers(res);
+  } else if (Array.isArray(res?.data)) {
+    setVolunteers(res.data);
+  } else {
+    setVolunteers([]);
+  }
+};
+
+
+
+useEffect(() => {
+  getContacts();
+  loadVolunteers();
+  getRequests();
+}, []);
+
+
 
   const handleSectionChange = (section) => {
     setActiveSection(section);
@@ -103,6 +120,7 @@ const getRequests = async () => {
     setSelectedVolunteer(null);
     setSidebarOpen(false);
   };
+
 
 
   return (
@@ -184,7 +202,7 @@ const getRequests = async () => {
             >
               <Users size={20} />
               <span className="text-sm font-medium">Volunteer List</span>
-              {volunteers.length > 0 && (
+              {(volunteers || []).length > 0 && (
                 <span className="ml-auto text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
                   {volunteers.length}
                 </span>
@@ -336,13 +354,19 @@ const getRequests = async () => {
                             {new Date(request.createdAt).toLocaleString()}
                           </p>
 
-                          <p className="text-xs text-gray-500 mt-1 flex space-x-2">
-                            Requested Donation:{" "}
-                            <p className=" text-gray-800 bg-gray-200 rounded-md px-2">
-                            {typeof request.donation === "object"
-                              ? request.donation.foodName || request.donation._id
-                              : request.donation}</p>
-                          </p>
+                          <div className="text-xs text-gray-500 mt-1 flex space-x-2">
+                              <span>Requested Donation:</span>
+                              <span className="text-gray-800 bg-gray-200 rounded-md px-2">
+
+                                {request.donation
+                                  ? typeof request.donation === "object"
+                                    ? request.donation.foodName || request.donation._id || "Unknown"
+                                    : request.donation
+                                  : "No donation info"}
+
+                              </span>
+                            </div>
+
                           </div>
                         </div>
                       ))
@@ -362,7 +386,7 @@ const getRequests = async () => {
                 <>
                   <div className="h-[55dvh] w-full">
                     {volunteers.length > 0 ? (
-                    volunteers.map((volunteer) => (
+                    (volunteers || []).map((volunteer) => (
                       <div
                         key={volunteer._id}
                         onClick={() => {
@@ -567,7 +591,7 @@ const getRequests = async () => {
                     className="cursor-pointer"
                     onClick={async () => {
                       const deleted = await DelVolunteers(selectedVolunteer._id, getVolunteers);
-                      getVolunteers();
+                      loadVolunteers();
                     }}
                   >
                     <Trash2 className="hover:text-gray-600" />
@@ -669,12 +693,16 @@ const getRequests = async () => {
 
                   <div className="flex space-x-2 ">
                     <p className="font-medium mb-2">Requested:</p>
-                  <p className=" text-gray-600">
-                    {typeof selectedRequest.donation === "object"
-                      ? `${selectedRequest.donation.foodName || "Food Item"} (ID: ${selectedRequest.donation._id})`
-                      : selectedRequest.donation}
-                  </p>
+
+                    <p className="text-gray-600">
+                      {selectedRequest.donation
+                        ? (typeof selectedRequest.donation === "object"
+                            ? `${selectedRequest.donation.foodName || "Unknown Food"} (ID: ${selectedRequest.donation._id || "N/A"})`
+                            : selectedRequest.donation)
+                        : "Expired"}
+                    </p>
                   </div>
+
 
                   <br />
                   {selectedRequest.donation?.city && (

@@ -10,9 +10,8 @@
 
       if (!response.ok) throw new Error("Failed to fetch volunteers");
 
-      const data = await response.json();
-      console.log("Volunteers fetched successfully:", data);
-      setVolunteers(data);
+      return response.json();
+      // console.log("Volunteers fetched successfully:", data);
     } catch (error) {
       console.error("Error fetching volunteers:", error);
     }
